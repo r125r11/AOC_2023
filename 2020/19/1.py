@@ -1,4 +1,6 @@
 import re
+import time
+start_time = time.time()
 x = open("input.txt").read().strip()
 
 rules = {}
@@ -40,7 +42,11 @@ looping = True
 while(looping):
     exploding = True
 
+    if iterations == 5:
+        break
+
     print("iteration", iterations)
+    print("options available", len(options))
     
     #explode and keep exploding
     while(exploding):
@@ -55,7 +61,9 @@ while(looping):
                 if type(e) is list:
                     # print("e", e)
                     didFork = True
+                    print('o', o)
                     if type(e[0]) is not list:
+                        print("test")
                         newOptions.append([*o[0:i],*e,*o[i+1:]])
                     else:
                         explosions += 1
@@ -110,9 +118,10 @@ for o in options:
 
 count = 0
 for c in input[1].split("\n"):
-    print(c)
+    # print(c)
     if c in combinations:
         count += 1
 
 print (len(combinations))
 print (count)
+print("--- %s seconds ---" % (time.time() - start_time))
