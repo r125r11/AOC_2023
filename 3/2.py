@@ -1,4 +1,7 @@
 import re
+import time
+
+start_time = time.time()
 
 f = open("input.txt","r").read().split("\n")
 
@@ -57,3 +60,4 @@ sum = 0
 for i in numbersFound:
     sum += i
 print(sum)
+print("-------  %s seconds -------" % (time.time() - start_time))

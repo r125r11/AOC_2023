@@ -1,5 +1,7 @@
 import re
+import time
 
+start_time = time.time()
 f = open("input.txt","r").read().split("\n")
 
 numbersFound = {}
@@ -47,8 +49,10 @@ for i,l in enumerate(f):
         if re.match("[^0-9\.]",e):
             checkSurroundings(j,i)
     
-print(numbersFound)
+# print(numbersFound)
 sum = 0
 for i in numbersFound:
     sum += int(numbersFound[i])
 print(sum)
+
+print("-------  %s seconds -------" % (time.time() - start_time))
