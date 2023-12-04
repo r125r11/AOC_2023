@@ -1,11 +1,12 @@
 import re
 import time
 start_time = time.time()
-x = open("input.txt").read().strip()
+x = open("sample.txt").read().strip()
 
 rules = {}
 input = x.split("\n\n")
 
+#generate rules
 for r in input[0].split("\n"):
     rule = r.split(": ")
 
@@ -30,6 +31,7 @@ for r in input[0].split("\n"):
             else:
                 rules[key] = values[0]
 
+#init rule 0
 output = []
 for d in rules["0"]:
     output.append(rules[d])
@@ -37,16 +39,16 @@ for d in rules["0"]:
 options = [output]
 print("step 0", options)
 
+#iterate rules and permutations
 iterations = 1
 looping = True
 while(looping):
     exploding = True
 
-    if iterations == 5:
-        break
+    # if iterations == 7:
+    #     break
 
     print("iteration", iterations)
-    print("options available", len(options))
     
     #explode and keep exploding
     while(exploding):
@@ -61,9 +63,8 @@ while(looping):
                 if type(e) is list:
                     # print("e", e)
                     didFork = True
-                    print('o', o)
+                    # print('o', o)
                     if type(e[0]) is not list:
-                        print("test")
                         newOptions.append([*o[0:i],*e,*o[i+1:]])
                     else:
                         explosions += 1
@@ -81,8 +82,13 @@ while(looping):
         #no more explosions
         if explosions == 0:
             exploding = False
-    # print("options step 1 \n", options)
+            
+    print("options available", len(options))
+    # print("options step 1:")
+    # for i in options:
+    #     print("o:",i)
 
+    # resolve rules
     shouldStop = True
     newOptions = []
     for o in options:
@@ -97,6 +103,10 @@ while(looping):
                 shouldStop = False
         newOptions.append(output)
     options = newOptions
+
+    # print("options step 2:")
+    # for i in options:
+    #     print("o:",i)
 
     if shouldStop == True:
         looping = False
