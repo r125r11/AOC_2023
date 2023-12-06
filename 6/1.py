@@ -19,3 +19,27 @@ for d in v: prod *= d
 print(prod)
 
 print("-------  %s seconds -------" % (time.time() - start_time))
+
+start_time = time.time()
+
+f = open("input.txt","r").read().split("\n")
+
+t = [int(d) for d in f[0].split(":")[1].split()]
+d = [int(n) for n in f[1].split(":")[1].split()]
+
+v = []
+for i in range(len(t)):
+    l = 0
+    r = t[i]
+
+    for x in range(t[i]):
+        if (t[i]-x) * x <= d[i]:l +=1
+        else: break
+    v.append(t[i]-(l*2)+1)
+
+print(v)
+prod = 1
+for d in v: prod *= d
+print(prod)
+
+print("-------  %s seconds -------" % (time.time() - start_time))
