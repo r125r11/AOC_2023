@@ -1,4 +1,4 @@
-import time,math
+import time
 start_time = time.time()
 
 f = open("input.txt","r").read().split("\n")
