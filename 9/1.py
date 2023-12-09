@@ -32,13 +32,13 @@ start_time = time.time()
 # print(s)
 
 # ---------- Clean final ----------
-f = open("input.txt","r").read().split("\n")
+f = open("sample.txt","r").read().split("\n")
 
 s = 0
 
-def getDiff(v):return [v[1:][i] - v[:-1][i] for i in range(len(v[1:]))]
+def getDiff(v): return [v[1:][i] - v[:-1][i] for i in range(len(v[1:]))]
 
-def getDiffs(vs, i):return [*i, vs] if all(v == 0 for v in vs) else getDiffs(getDiff(vs),[*i, vs])
+def getDiffs(vs, i): return [*i, vs] if all(v == 0 for v in vs) else getDiffs(getDiff(vs),[*i, vs])
 
 for l in f:
     diffs = getDiffs([int(d) for d in l.split()], [])[::-1]
