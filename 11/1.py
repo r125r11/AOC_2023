@@ -19,9 +19,8 @@ for y,l in enumerate(f):
     for x,s in enumerate(l):
         if s != ".":coords.append([x,y,s])
 
-dist = []
+offset = 2
 sum = 0
-
 for i,s in enumerate(coords):
     tcs = coords[i+1:]
     for e in (tcs):
@@ -30,10 +29,10 @@ for i,s in enumerate(coords):
         diff = px[1]-px[0] + py[1]-py[0]
         for x in xs:
             if px[1] > x and px[0] < x:
-                diff += 1
+                diff += offset-1
         for y in ys:
             if py[1] > y and py[0] < y:
-                diff += 1
+                diff += offset-1
         sum += diff
 
 print(sum)
