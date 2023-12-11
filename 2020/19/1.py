@@ -1,7 +1,7 @@
 import re
 import time
 start_time = time.time()
-x = open("sample.txt").read().strip()
+x = open("input.txt").read().strip()
 
 rules = {}
 input = x.split("\n\n")
@@ -45,7 +45,7 @@ looping = True
 while(looping):
     exploding = True
 
-    # if iterations == 7:
+    # if iterations == 5:
     #     break
 
     print("iteration", iterations)
@@ -54,30 +54,29 @@ while(looping):
     while(exploding):
         explosions = 0
         newOptions = []
-        didFork = False
         for o in options:
-            # print("o", o)
+            didResolveList = False
             # resolve option and create fork
-            i = 0
-            for e in o:
+            for i,e in enumerate(o):
+                # line has [#, #] | [[#, #],[#, #]]
                 if type(e) is list:
                     # print("e", e)
-                    didFork = True
+                    didResolveList = True
                     # print('o', o)
+                    # line has [#, #] | [#]
                     if type(e[0]) is not list:
                         newOptions.append([*o[0:i],*e,*o[i+1:]])
+                    # line has [[#, #],[#, #]]
                     else:
                         explosions += 1
                         newOptions.append([*o[0:i],*e[0],*o[i+1:]])
                         newOptions.append([*o[0:i],*e[1],*o[i+1:]])
                         break
                     # print("no",newOptions)
-                i += 1
-            if didFork == False:
+            if didResolveList == False:
                 newOptions.append(o)
         
         options = newOptions
-        # print(options)
 
         #no more explosions
         if explosions == 0:
