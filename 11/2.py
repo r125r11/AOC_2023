@@ -33,3 +33,35 @@ for i,s in enumerate(coords):
 print(sum)
 
 print("-------  %s seconds -------" % (time.time() - start_time))
+
+# shorter but 2x slower
+start_time = time.time()
+
+ys = range(len(f))
+xs = range(len(f[0]))
+
+coords = []
+for y,l in enumerate(f):
+    for x,g in enumerate(l):
+        if g != ".":
+            coords.append((x,y))
+            ys = [n for n in ys if n != y]
+            xs = [n for n in xs if n != x]
+
+offset = 1000000
+sum = 0
+for i,(r,c) in enumerate(coords):
+    tcs = coords[i+1:]
+    for r2,c2 in (tcs):
+        diff = abs(r2-r)+abs(c2-c)
+        for x in xs:
+            if min(r,r2)<=x<=max(r,r2):
+                diff += offset-1
+        for y in ys:
+            if min(c,c2)<=y<=max(c,c2):
+                diff += offset-1
+        sum += diff
+
+print(sum)
+
+print("-------  %s seconds -------" % (time.time() - start_time))
