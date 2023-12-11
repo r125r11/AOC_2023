@@ -3,21 +3,16 @@ start_time = time.time()
 
 f = open("input.txt","r").read().split("\n")
 
-# insert lines
-ys = [i for i,l in enumerate(f) if '#' not in l]
-
-xs = []
-# insert columns
-for x,_ in enumerate(f[0]):
-    s = 0
-    for y,l in enumerate(f):
-        if f[y][x] == "#":s += 1
-    if s == 0: xs.append(x)
+ys = range(len(f))
+xs = range(len(f[0]))
 
 coords = []
 for y,l in enumerate(f):
     for x,s in enumerate(l):
-        if s != ".":coords.append([x,y,s])
+        if s != ".":
+            coords.append([x,y,s])
+            ys = [n for n in ys if n != y]
+            xs = [n for n in xs if n != x]
 
 offset = 2
 sum = 0
