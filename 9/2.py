@@ -1,4 +1,5 @@
 import time
+from itertools import pairwise
 start_time = time.time()
 
 # ---------- Try one ----------
@@ -42,6 +43,7 @@ def getDiffs(values, items):return [*items, values] if all(v == 0 for v in value
 s = 0
 
 for l in f:
+    # diffs = [b - a for a, b in pairwise([int(x) for x in l.split()[::-1]])] #getDiffs([int(d) for d in l.split()], [])[::-1]
     diffs = getDiffs([int(d) for d in l.split()], [])[::-1]
     for i in range(len(diffs)-1):
         ld = diffs[i+1][::-1]
