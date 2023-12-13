@@ -24,25 +24,22 @@ def findMirror(g,m):
                 if s > 1: break
                 ui -= 1
                 di += 1
-            if s == 1: return [m * i, True]
+            if s == 1: return m * i
 
             
-    return [0, False]
+    return 0
 
-sum = 0
+ss = 0
 for g in f:
     g = g.split("\n")
     #lines
-    value, found = findMirror(g,100)
-    print("vl",value)
+    value = findMirror(g,100)
 
-    if found == False:
+    if value == 0:
         #columns
-        g = transpose(g)
-        value, found = findMirror(g,1)
-        print("vc",value)
+        value = findMirror(transpose(g),1)
 
-    sum += value
+    ss += value
 
-print(sum)
+print(ss)
 print("-------  %s seconds -------" % (time.time() - start_time))
