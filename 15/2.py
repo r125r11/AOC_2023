@@ -5,10 +5,7 @@ f = open("input.txt","r").read().split(",")
 
 def Hash(s):
     v = 0
-    for c in s:
-        v += ord(c)
-        v *= 17
-        v %= 256
+    for c in s: v = ((v + ord(c)) * 17)%256
     return v
 
 boxes = [{} for _ in range(256)]
