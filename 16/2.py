@@ -1,7 +1,7 @@
 import time
 start_time = time.time()
 
-f = open("sample.txt","r").read().split("\n")
+f = open("input.txt","r").read().split("\n")
 
 visitedNodes = []
 openPaths = [{'x':-1,'y':0,'d':0}]
@@ -9,6 +9,7 @@ while len(openPaths) > 0:
     # print(openPaths)
     node = openPaths.pop()
     if node not in visitedNodes:visitedNodes.append(node)
+    else: continue
     nextNode = {k:node[k] for k in node}
     match node['d']:
         case 0: nextNode['x']+=1
@@ -16,8 +17,8 @@ while len(openPaths) > 0:
         case 2: nextNode['x']-=1
         case 3: nextNode['y']+=1
 
-    if nextNode in visitedNodes:
-        continue
+    # if nextNode in visitedNodes:
+    #     continue
 
     # print(nextNode)
     if nextNode['x'] < 0:           continue
@@ -97,7 +98,7 @@ for y,l in enumerate(f):
                     case 0: nl += '>'
                     case 1: nl += '^'
                     case 2: nl += '<'
-                    case 3: nl += 'V'
+                    case 3: nl += 'v'
     print(nl)
 
 fn = []
