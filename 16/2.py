@@ -48,6 +48,8 @@ def energise(start,i):
     values = list(start.values())
     startKey = '%s,%s,%s' % (values[0],values[1],values[2])
     pathKeyNodes = [start]
+
+    visitedNodes = []
     
     loops = 0
     path = []
@@ -59,21 +61,24 @@ def energise(start,i):
         values = list(node.values())
         nodeKey = '%s,%s,%s' % (values[0],values[1],values[2])
 
+        # visited nodes
+        if node not in visitedNodes: visitedNodes.append(node)
+        else: continue
+
         # new path
         if node in pathKeyNodes:
             startKey = nodeKey
             path = []
-        
+
         # path already explored
         if startKey in pathCache:
             nextNodes = pathCache[startKey]['exitNodes']
             pathKeyNodes = [*pathKeyNodes, *[n for n in nextNodes if n not in pathKeyNodes]]
-            openPaths = [*openPaths, *[n for n in nextNodes if n not in pathKeyNodes]]
+            openPaths = [*openPaths, *[n for n in nextNodes if n not in openPaths]]
             continue
         
         # add note to path
-        if node not in path:path.append(node)
-        else: continue
+        path.append(node)
 
         # get newnodes
         nextNodes = [n for n in nodesCache[nodeKey] if 0 <= n['x'] < len(f[0]) and 0 <= n['y'] < len(f)]
@@ -88,57 +93,58 @@ def energise(start,i):
         # continue on the path
         openPaths.append(nextNodes[0])
 
-    finalPath = []
-    for n in pathKeyNodes:
-        values = list(n.values())
-        nodeKey = '%s,%s,%s' % (values[0],values[1],values[2])
-        if nodeKey in pathCache:
-            for nn in pathCache[nodeKey]['path']:
-                finalPath.append(nn)
-        else:
-            print('%s not found' % nodeKey)
+    # if i == 2 or i == 0:
+    #     fn = []
+    #     # clean duplicated
+    #     for n in finalPath:
+    #         nn = {k:n[k] for k in n if k != 'd'}
+    #         # if nn not in fn: fn.append(nn)
+    #         fn.append(nn)
 
-    fn = []
-    # clean duplicated
-    # for n in finalPath:
-    #     nn = {k:n[k] for k in n if k != 'd'}
-    #     # if nn not in fn: fn.append(nn)
-    #     fn.append(nn)
+    #     for y,l in enumerate(f):
+    #         nl = ''
+    #         for x,c in enumerate(l):
+    #             if c in ['\\','/','-','|']: nl += c
+    #             else:
+    #                 node = {'x':x,'y':y}
+    #                 n = fn.count(node)
+    #                 if n == 0: nl += '.'
+    #                 if n > 1: nl += str(n)
+    #                 if n == 1: 
+    #                     match finalPath[fn.index(node)]['d']:
+    #                         case 0: nl += '>'
+    #                         case 1: nl += '^'
+    #                         case 2: nl += '<'
+    #                         case 3: nl += 'v'
+    #         print(nl)
 
-    # for y,l in enumerate(f):
-    #     nl = ''
-    #     for x,c in enumerate(l):
-    #         if c in ['\\','/','-','|']: nl += c
-    #         else:
-    #             node = {'x':x,'y':y}
-    #             n = fn.count(node)
-    #             if n == 0: nl += '.'
-    #             if n > 1: nl += str(n)
-    #             if n == 1: 
-    #                 match finalPath[fn.index(node)]['d']:
-    #                     case 0: nl += '>'
-    #                     case 1: nl += '^'
-    #                     case 2: nl += '<'
-    #                     case 3: nl += 'v'
-    #     print(nl)
-
-
-    fn = []
-    # clean duplicated
-    for n in finalPath:
-        nn = {k:n[k] for k in n if k != 'd'}
-        if nn not in fn: fn.append(nn)
     
-    print(len(fn))
+    
+    # print(len(fn))
     print('%03d-------  %s seconds -------' % ((i+1), time.time() - start_time))
-    return len(fn)
+    return pathKeyNodes
 
 print(len(startingNodes))
 # index = 0
 # print(energise(startingNodes[index],index))
-optimizedValues = [energise(s,i) for i,s in enumerate(startingNodes)]
-print(optimizedValues)
-print(max(optimizedValues))
+pathKeyNodes = [energise(s,i) for i,s in enumerate(startingNodes)]
+
+pathLengths = []
+for keyNodes in pathKeyNodes:
+    fn = []
+    for n in keyNodes:
+        values = list(n.values())
+        nodeKey = '%s,%s,%s' % (values[0],values[1],values[2])
+        if nodeKey in pathCache:
+            for nn in pathCache[nodeKey]['path']:
+                nn = {k:nn[k] for k in nn if k != 'd'}
+                if nn not in fn: fn.append(nn)
+        else:continue
+
+    pathLengths.append(len(fn))
+
+print(pathLengths)
+print(max(pathLengths))
 
 print('-------  %s seconds -------' % (time.time() - start_time))
 
