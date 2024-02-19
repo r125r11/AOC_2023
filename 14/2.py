@@ -1,7 +1,7 @@
 import time
 start_time = time.time()
 
-f = open("sample.txt","r").read().split("\n")
+f = open("input.txt","r").read().split("\n")
 
 def rotate_90_degree_anticlckwise(matrix):
     new_matrix = []
@@ -20,18 +20,10 @@ def rotate_90_degree_clckwise(matrix):
 
     return new_matrix
 
-f = rotate_90_degree_anticlckwise(f)
-rt = 1000000000
-rt *= 4
-# sequence starting index
-ssi = 0
-t = 0
-uniqueBoards = []
-while t < rt:
-    for i,l in enumerate(f):
+def move_rocks(matrix):
+    for i,l in enumerate(matrix):
         rpl = {-1:0}
         base = -1
-        rc = 0
         for j,c in enumerate(l):
             match c:
                 case "O":
@@ -39,7 +31,6 @@ while t < rt:
                 case "#":
                     base = j
                     rpl[base] = 0
-                    rc = 0
         keys = list(rpl.keys())
         nl = ''
         for n,k in enumerate(keys):
@@ -50,41 +41,45 @@ while t < rt:
             rocks = ''.join(['O' for _ in range(rpl[k])])
             nl+=rocks
             nl+=empty
-        f = [*f[:i],nl,*f[i+1:]]
+        matrix = [*matrix[:i],nl,*matrix[i+1:]]
 
-    #found sequence
-    if f in uniqueBoards:
-        ssi = uniqueBoards.index(f)
-        break
-    uniqueBoards.append(f)
-    f = rotate_90_degree_clckwise(f)
+    return matrix
+
+def tumble(matrix):
+    matrix = rotate_90_degree_clckwise(rotate_90_degree_clckwise(matrix))
+    for _ in range(4):
+        matrix = rotate_90_degree_clckwise(matrix)
+        matrix = move_rocks(matrix)
+    matrix = rotate_90_degree_clckwise(rotate_90_degree_clckwise(matrix))
+    return matrix
+
+t = 0
+ssi = 0
+rt = 1e9
+# rt = 3
+boards = {}
+while t < rt:
     t += 1
+    f = tumble(f)
 
-# for i,b in enumerate(uniqueBoards):
-#     print('\nboard',i+1,'\n')
-#     for l in b: print(l)
+    sf = ''.join(''.join(l) for l in f)
+    #found sequence
+    if sf in boards:
+        sequenceLength = t - boards[sf]
+        sequenceInRT = (rt-t)//sequenceLength
+        t += sequenceInRT * sequenceLength
+    boards[sf] = t
 
-# print(ssi, len(uniqueBoards))
-sequenceIndex = ssi+(rt-ssi)%(len(uniqueBoards)-ssi)+1
-print(sequenceIndex)
-f = uniqueBoards[sequenceIndex]
-# f = rotate_90_degree_clckwise(f)
-# f = rotate_90_degree_clckwise(f)
+def score(G):
+  ans = 0
+  R = len(G)
+  C = len(G[0])
+  for r in range(R):
+    for c in range(C):
+      if G[r][c]=='O':
+        ans += len(G)-r
+  return ans
 
-for l in f:
-    print(''.join(l))
-
-sum = 0
-for i,l in enumerate(f):
-    base = len(l)
-    for j,c in enumerate(l):
-        match c:
-            case "O":
-                sum += base
-                base -= 1
-            case "#":
-                base = len(l)-j-1
-
-print(sum)
+print(score(f))
 
 print("-------  %s seconds -------" % (time.time() - start_time))
